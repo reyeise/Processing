@@ -1,7 +1,8 @@
 # Processing
 Small projects
 
-Project 1 - AM 7 Abstract Art Recreation
+Project 1 - AM 7 Abstract Art Recreation - László Moholy-Nagy: Painting "Am 7" (1926)
+
 
 <img width="798" alt="Screenshot 2021-08-09 at 17 31 12" src="https://user-images.githubusercontent.com/78770822/128741047-c3ef86b0-c121-41df-b781-e6ae040d3e52.png">
 
