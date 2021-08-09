@@ -1,0 +1,41 @@
+import ddf.minim.Minim;
+import ddf.minim.AudioOutput;
+import processing.sound.*;
+
+SawOsc saw;
+
+AudioOutput out;
+
+void setup() {
+  size(300, 300);
+
+  Minim minim = new Minim(this);
+  out = minim.getLineOut();
+
+  frameRate(6);
+
+  saw = new SawOsc(this);
+  saw.freq(220);
+  saw.amp(0.4);
+  saw.play();
+
+}
+
+void draw() {
+  background(50);
+
+  saw.freq(map(mouseX,0,width,50,200));
+  saw.amp(map(mouseY,height,0,0,1.0));
+
+
+  float note = random(1200);
+
+  out.playNote(note);
+
+  stroke(random(256), random(256), random(256));
+  line(pmouseX,pmouseX,mouseX,mouseY);
+}
+
+void mousePressed() {
+  background(50);
+} 
