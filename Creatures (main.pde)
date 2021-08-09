@@ -1,0 +1,49 @@
+import java.util.Random;
+
+
+
+final int width = 1280;
+final int height = 720;
+
+
+ArrayList<Creature> creatures = new ArrayList<Creature>();
+
+
+void setup() {
+  size(1280, 720);
+  
+  for(int i = 0; i < 100;i++){
+    
+    Random rand = new Random();
+    Vector2 position = new Vector2(rand.nextInt(width),rand.nextInt(height));
+    
+    Creature a = new Creature(position);
+    creatures.add(a);
+  }
+  
+}
+
+void draw() {
+  background(0);
+  
+  for(Creature c : creatures){
+     c.update();
+   }
+  
+   for(Creature c : creatures){
+     c.draw();
+   }
+}
+
+void mousePressed() {
+  for(Creature c : creatures){
+     c.setMousePress();
+   }
+  
+}
+
+void mouseReleased() {
+   for(Creature c : creatures){
+     c.setMouseRelease();
+   }
+}
