@@ -1,5 +1,5 @@
 # Processing
-Small project briefs
+Small projects
 
 Project 1 - AM 7 Abstract Art Recreation
 
