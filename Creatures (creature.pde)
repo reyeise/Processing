@@ -1,0 +1,168 @@
+import java.util.Random;
+
+enum State{
+   IDLE,
+   ATTRACTED,
+   AFRAID
+}  
+
+class Creature{
+  
+   
+  Vector2 position;
+  Vector2 velocity;
+  int radius = 20;
+  State state;
+  Vector2 target;
+  Vector2 fleeTarget;
+  float speed = 2f;
+  float seekForce = 20f;
+  
+  Boolean mouseHold = false;
+
+  public Creature(Vector2 position){
+    this.position = position;
+    this.velocity = new Vector2();
+    this.target = new Vector2();
+    
+    this.state = State.IDLE;
+    
+    target = randomPosition();
+    fleeTarget = new Vector2(-10,-10);
+  }
+  
+
+
+  
+  public void update(){
+    
+    
+    //switch(state){
+    //  case IDLE:
+          
+    //    break;
+    //  case ATTRACTED:
+    //     break;
+    //  case AFRAID:
+    //      break;
+    //}
+    
+    if(state == State.IDLE){
+      //Random rand = new Random();
+      if(position.distance(target) < 20f){
+        target = randomPosition();
+      }
+    }
+    
+   
+    
+    fleeTarget = new Vector2(mouseX,mouseY);
+    
+    if(fleeTarget.getX() > 0 && fleeTarget.getX() < 1280 && fleeTarget.getY() > 0 && fleeTarget.getY() < 720){
+      
+      if(mouseHold && position.distance(fleeTarget) < 200f){
+        state = State.ATTRACTED;
+        target = new Vector2(mouseX,mouseY);
+        speed = 3;
+      }
+      else if(position.distance(fleeTarget) < 50){
+          state = State.AFRAID;
+           speed = 5;
+      }else{
+          state = State.IDLE;
+          speed = 1;
+      }
+      
+      
+    }
+    
+    
+    movement();
+  }
+  
+  public void setMousePress() {
+    mouseHold = true;
+  }
+  
+  void setMouseRelease() {
+    target = randomPosition();
+    mouseHold = false;
+  }
+  
+  public void movement()
+  {
+      Vector2 steering = new Vector2(0,0);
+
+      steering = steering.add(seek());
+
+     if( state == State.AFRAID){
+          steering = steering.add(flee());
+      }
+
+      if(steering.getX() > seekForce){
+        steering.setX(seekForce);
+      }
+      if(steering.getY() > seekForce){
+        steering.setY(seekForce);
+      }
+
+      velocity = velocity.add(steering);
+       if(velocity.getX() > speed){
+        velocity.setX(speed);
+      }
+      if(velocity.getY() > speed){
+        velocity.setY(speed);
+      }
+      //System.out.println("target: " +target.getX() +":" + target.getY() );
+      //System.out.println("velocity: " + velocity.getX() +":" + velocity.getY() );
+      position = position.add(velocity);
+  }
+  
+  Vector2 seek(){
+    Vector2 desired = target.minus(position);
+
+    desired = desired.normalized().mul(new Vector2(speed,speed));
+
+    Vector2 steering = desired.minus(velocity);
+
+    return steering;
+  }
+  
+  Vector2 flee(){
+    Vector2 desired = fleeTarget.minus(position);
+
+    desired = desired.normalized().mul(new Vector2(-speed,- speed));
+
+    Vector2 steering = desired.minus(velocity);
+
+    return steering;
+  }
+  
+  Vector2 randomPosition(){
+       Random rand = new Random();
+       Vector2 randPos = new Vector2(rand.nextInt(1280),rand.nextInt(720));
+       return randPos;
+  }
+  
+  color getColor(){
+    color c = color(1,1,1);
+    switch(state){
+      case IDLE:
+        c = color(23,32,200); 
+        break;
+      case ATTRACTED:
+        c = color(23,200,32);
+        break;
+      case AFRAID:
+        c = color(200,23,32);
+        break;
+    }
+    return c;
+  }
+  
+  public void draw(){
+     fill(getColor());
+     ellipse(position.getX(), position.getY(), radius, radius);
+  }
+
+}
